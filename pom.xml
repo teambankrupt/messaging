@@ -97,7 +97,6 @@
 			<version>${websocket.messaging.version}</version>
 		</dependency>
 
-
 		<!--Kotlin-->
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
