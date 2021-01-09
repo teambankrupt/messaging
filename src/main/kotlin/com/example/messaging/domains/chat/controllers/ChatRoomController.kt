@@ -1,5 +1,6 @@
 package com.example.messaging.domains.chat.controllers
 
+import com.example.auth.config.security.SecurityContext
 import com.example.coreweb.commons.Constants
 import com.example.common.utils.ExceptionUtil
 import com.example.messaging.domains.chat.models.dtos.ChatRoomDto
@@ -29,6 +30,14 @@ class ChatRoomController @Autowired constructor(
                         @RequestParam("page", defaultValue = "0") page: Int,
                         @RequestParam("size", defaultValue = "10") size: Int): ResponseEntity<Page<ChatRoomDto>> {
         val chatRooms = this.chatRoomService.search(query, page, size)
+        return ResponseEntity.ok(chatRooms.map { this.chatRoomMapper.map(it) })
+    }
+
+    @GetMapping(Route.V1.SEARCH_MY_CHATROOMS)
+    fun searchMyRooms(@RequestParam("q", defaultValue = "") query: String,
+                      @RequestParam("page", defaultValue = "0") page: Int,
+                      @RequestParam("size", defaultValue = "10") size: Int): ResponseEntity<Page<ChatRoomDto>> {
+        val chatRooms = this.chatRoomService.search(query, SecurityContext.getLoggedInUsername(), page, size)
         return ResponseEntity.ok(chatRooms.map { this.chatRoomMapper.map(it) })
     }
 

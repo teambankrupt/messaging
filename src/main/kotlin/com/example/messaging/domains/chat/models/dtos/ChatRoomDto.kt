@@ -5,8 +5,8 @@ import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
 class ChatRoomDto : BaseDto() {
-    @NotNull
-    lateinit var title: String
+
+    var title: String? = null
 
     @NotNull
     @NotEmpty
