@@ -13,8 +13,12 @@ class ChatRoom : BaseEntity() {
 
     var title: String? = null
         get() {
+            val auth = SecurityContext.getCurrentUser()
             return if (field.isNullOrBlank()) {
-                if (users.size == 2) users.first { it != SecurityContext.getLoggedInUsername() } else Commons.summary(users.joinToString(), 50)
+                if (users.size == 2 && !auth.isAdmin)
+                    users.first { it != auth.username }
+                else
+                    Commons.summary(users.joinToString(), 50)
             } else field
         }
 
