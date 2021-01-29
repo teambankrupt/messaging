@@ -11,7 +11,7 @@ class Route {
              * WEBSOCKET - CHAT
              */
             // Chat Rooms
-            const val SEARCH_CHATROOMS = "$API$VERSION/admin/chat/chatrooms"
+            const val SEARCH_CHATROOMS = "$API$VERSION$ADMIN/chat/chatrooms"
             const val SEARCH_MY_CHATROOMS = "$API$VERSION/chat/my-chatrooms"
             const val CREATE_CHATROOM = "$API$VERSION/chat/chatrooms"
             const val FIND_CHATROOM = "$API$VERSION/chat/chatrooms/{id}"
