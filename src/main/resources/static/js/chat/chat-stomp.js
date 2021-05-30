@@ -50,7 +50,7 @@ function disconnect() {
 function sendMessage() {
     var from = document.getElementById('chat_room_id').value;
     var text = document.getElementById('content').value;
-    var requObject = JSON.stringify({'chat_room_id': from, 'content': text});
+    var requObject = JSON.stringify({'chat_room_id': from, 'content': text, 'from':'01316343767'});
     // console.log(requObject);
     stompClient.send("/ws/chat", {}, requObject);
 }

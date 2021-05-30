@@ -14,15 +14,16 @@ import javax.validation.Valid
 
 @RestController
 class ChatMessageController @Autowired constructor(
-        private val chatMessageMapper: ChatMessageMapper,
-        private val chatMessageService: ChatMessageService,
-        private val simpMessagingTemplate: SimpMessagingTemplate
+    private val chatMessageMapper: ChatMessageMapper,
+    private val chatMessageService: ChatMessageService,
+    private val simpMessagingTemplate: SimpMessagingTemplate
 ) {
 
     @MessageMapping(Route.V1.CHAT)
 //    @SendTo("/topic/messages")
     fun send(@Valid @Payload chatMessageDto: ChatMessageDto, principal: Principal) {
-        chatMessageDto.from = principal.name
+        if (chatMessageDto.from == null) // TODO: remove this check when security implementatiion is done
+            chatMessageDto.from = principal.name
         var message = this.chatMessageMapper.map(chatMessageDto, null)
         message = this.chatMessageService.save(message)
         val dto = this.chatMessageMapper.map(message)

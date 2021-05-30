@@ -33,6 +33,8 @@ class ChatMessageMapper @Autowired constructor(
         val entity = exEntity ?: ChatMessage()
 
         entity.chatRoom = this.chatRoomService.find(dto.chatRoomId).orElseThrow { ExceptionUtil.notFound("Could not find chatroom with id: ${dto.chatRoomId}") }
+        if (entity.chatRoom.users.none { it==dto.from })
+            throw ExceptionUtil.forbidden("User isn't allowed to send message in this room.")
         entity.from = if (this.authService.existsByUsername(dto.from
                         ?: "")) dto.from.toString() else throw  ExceptionUtil.notFound("Could not find user with username: ${dto.from}")
         entity.content = dto.content
