@@ -3,6 +3,7 @@ var subscription = null;
 connect();
 updateScroll();
 
+
 function setConnected(connected) {
     document.getElementById('connect').disabled = connected;
     document.getElementById('disconnect').disabled = !connected;
@@ -13,7 +14,8 @@ function setConnected(connected) {
 
 function connect() {
     if (stompClient != null) return;
-    var socket = new SockJS('/chat');
+    var baseUrl = document.getElementById('base_url').value;
+    var socket = new SockJS(baseUrl + '/chat');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         // setConnected(true);
@@ -33,7 +35,7 @@ function subscribe(elementId, chatroomId) {
     });
 
     $('#chat_room_id').val(chatroomId);
-    $("[id^=chatRoomItem]").attr('class','');
+    $("[id^=chatRoomItem]").attr('class', '');
     $('#' + elementId).attr('class', 'active');
 }
 
