@@ -1,5 +1,6 @@
 package com.example.messaging.domains.chat.controllers
 
+import com.example.common.utils.ExceptionUtil
 import com.example.messaging.domains.chat.models.dtos.ChatMessageDto
 import com.example.messaging.domains.chat.models.mappers.ChatMessageMapper
 import com.example.messaging.domains.chat.services.ChatMessageService
@@ -21,9 +22,9 @@ class ChatMessageController @Autowired constructor(
 
     @MessageMapping(Route.V1.CHAT)
 //    @SendTo("/topic/messages")
-    fun send(@Valid @Payload chatMessageDto: ChatMessageDto, principal: Principal?) {
+    fun send(@Valid @Payload chatMessageDto: ChatMessageDto) {
         if (chatMessageDto.from == null) // TODO: remove this check when security implementatiion is done
-            chatMessageDto.from = principal?.name
+            throw ExceptionUtil.invalid("`from` can't be null")
         var message = this.chatMessageMapper.map(chatMessageDto, null)
         message = this.chatMessageService.save(message)
         val dto = this.chatMessageMapper.map(message)
