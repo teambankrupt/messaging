@@ -21,9 +21,9 @@ class ChatMessageController @Autowired constructor(
 
     @MessageMapping(Route.V1.CHAT)
 //    @SendTo("/topic/messages")
-    fun send(@Valid @Payload chatMessageDto: ChatMessageDto, principal: Principal) {
+    fun send(@Valid @Payload chatMessageDto: ChatMessageDto, principal: Principal?) {
         if (chatMessageDto.from == null) // TODO: remove this check when security implementatiion is done
-            chatMessageDto.from = principal.name
+            chatMessageDto.from = principal?.name
         var message = this.chatMessageMapper.map(chatMessageDto, null)
         message = this.chatMessageService.save(message)
         val dto = this.chatMessageMapper.map(message)
