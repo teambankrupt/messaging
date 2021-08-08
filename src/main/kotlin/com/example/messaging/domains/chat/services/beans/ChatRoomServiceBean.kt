@@ -1,5 +1,6 @@
 package com.example.messaging.domains.chat.services.beans
 
+import com.example.auth.config.security.SecurityContext
 import com.example.common.utils.ExceptionUtil
 import com.example.coreweb.utils.PageAttr
 import com.example.messaging.domains.chat.models.entities.ChatRoom
@@ -12,7 +13,7 @@ import java.util.*
 
 @Service
 class ChatRoomServiceBean @Autowired constructor(
-        private val chatRoomRepository: ChatRoomRepository
+    private val chatRoomRepository: ChatRoomRepository
 ) : ChatRoomService {
 
 
@@ -26,6 +27,14 @@ class ChatRoomServiceBean @Autowired constructor(
 
     override fun save(entity: ChatRoom): ChatRoom {
         this.validate(entity)
+        if (entity.users.size == 2) {
+            val authUsername = SecurityContext.getLoggedInUsername()
+            val cr = this.chatRoomRepository.findPersonalChat(
+                authUsername,
+                entity.users.first { it != authUsername }
+            )
+            if (cr.isPresent) return cr.get()
+        }
         return this.chatRoomRepository.save(entity)
     }
 

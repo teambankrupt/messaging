@@ -21,4 +21,9 @@ interface ChatRoomRepository : JpaRepository<ChatRoom, Long> {
     @Query("SELECT DISTINCT cr FROM ChatRoom cr JOIN cr.users u WHERE u=:username AND (:q IS NULL OR cr.title IS NULL OR cr.title LIKE %:q%) AND cr.deleted=false")
     fun search(@Param("q") query: String?, @Param("username") username: String, pageable: Pageable): Page<ChatRoom>
 
+    @Query("SELECT cr FROM ChatRoom cr WHERE (:selfUsername member cr.users) AND (:recipientUsername member cr.users) AND cr.users.size=2 AND cr.deleted=FALSE")
+    fun findPersonalChat(
+        @Param("selfUsername") selfUsername: String,
+        @Param("recipientUsername") recipientUsername: String
+    ): Optional<ChatRoom>
 }
