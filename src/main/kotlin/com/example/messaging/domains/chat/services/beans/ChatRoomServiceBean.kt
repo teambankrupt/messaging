@@ -29,11 +29,11 @@ class ChatRoomServiceBean @Autowired constructor(
         this.validate(entity)
         if (entity.users.size == 2) {
             val authUsername = SecurityContext.getLoggedInUsername()
-            val cr = this.chatRoomRepository.findPersonalChat(
+            val cr = this.chatRoomRepository.findPersonalChats(
                 authUsername,
                 entity.users.first { it != authUsername }
             )
-            if (cr.isPresent) return cr.get()
+            if (cr.isNotEmpty()) return cr.first()
         }
         return this.chatRoomRepository.save(entity)
     }
