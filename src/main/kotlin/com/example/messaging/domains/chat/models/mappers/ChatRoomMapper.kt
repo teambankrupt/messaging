@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ChatRoomMapper @Autowired constructor(
-        private val authService: AuthService
+    private val authService: AuthService
 ) : BaseMapper<ChatRoom, ChatRoomDto> {
 
     override fun map(entity: ChatRoom): ChatRoomDto {
@@ -20,6 +20,7 @@ class ChatRoomMapper @Autowired constructor(
         dto.updatedAt = entity.updatedAt
 
         dto.title = entity.title
+        dto.lastMessage = "Last message for a chatroom (demo)" // TODO: incorporate this feature
         dto.users = entity.users
         return dto
     }
@@ -28,8 +29,8 @@ class ChatRoomMapper @Autowired constructor(
         val entity = exEntity ?: ChatRoom()
         entity.title = dto.title
         entity.users = dto.users
-                .map { if (this.authService.existsByUsername(it)) it else throw  ExceptionUtil.notFound("Could not find user with username: $it")  }
-                .toMutableList()
+            .map { if (this.authService.existsByUsername(it)) it else throw  ExceptionUtil.notFound("Could not find user with username: $it") }
+            .toMutableList()
         return entity
     }
 
