@@ -26,9 +26,7 @@ import javax.validation.Valid
 @Api(tags = [Constants.Swagger.CHAT_ROOMS], description = Constants.Swagger.CHAT_ROOMS_DETAILS)
 class ChatRoomController @Autowired constructor(
         private val chatRoomMapper: ChatRoomMapper,
-        private val chatRoomService: ChatRoomService,
-        private val chatMessageService: ChatMessageService,
-        private val chatMessagesMapper: ChatMessageMapper
+        private val chatRoomService: ChatRoomService
 ) : CrudController<ChatRoomDto> {
 
     @GetMapping(Route.V1.SEARCH_CHATROOMS)
@@ -51,12 +49,6 @@ class ChatRoomController @Autowired constructor(
     override fun find(@PathVariable("id") id: Long): ResponseEntity<ChatRoomDto> {
         val chatRoom = this.chatRoomService.find(id).orElseThrow { ExceptionUtil.notFound("Could not find chatroom with id: $id") }
         return ResponseEntity.ok(this.chatRoomMapper.map(chatRoom))
-    }
-
-    @GetMapping(Route.V1.FIND_CHATROOM_MESSAGES)
-    fun findChatroomMessages(@PathVariable("id") chatroomId: Long): ResponseEntity<List<ChatMessageDto>> {
-        val messages = this.chatMessageService.findForChatroom(chatroomId)
-        return ResponseEntity.ok(messages.map { this.chatMessagesMapper.map(it) })
     }
 
     @PostMapping(Route.V1.CREATE_CHATROOM)

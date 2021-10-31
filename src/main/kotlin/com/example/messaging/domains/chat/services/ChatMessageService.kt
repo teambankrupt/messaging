@@ -4,5 +4,5 @@ import com.example.messaging.domains.chat.models.entities.ChatMessage
 import com.example.coreweb.domains.base.services.CrudService
 
 interface ChatMessageService : CrudService<ChatMessage> {
-    fun findForChatroom(chatroomId: Long): List<ChatMessage>
+    fun findForChatroom(chatroomId: Long, lastMessageId: Long?): List<ChatMessage>
 }

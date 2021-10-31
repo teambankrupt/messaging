@@ -1,10 +1,12 @@
 package com.example.messaging.domains.chat.controllers
 
 import com.example.common.utils.ExceptionUtil
+import com.example.coreweb.commons.Constants
 import com.example.messaging.domains.chat.models.dtos.ChatMessageDto
 import com.example.messaging.domains.chat.models.mappers.ChatMessageMapper
 import com.example.messaging.domains.chat.services.ChatMessageService
 import com.example.messaging.routing.Route
+import io.swagger.annotations.Api
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
@@ -14,6 +16,7 @@ import java.security.Principal
 import javax.validation.Valid
 
 @RestController
+@Api(tags = [Constants.Swagger.CHAT_MESSAGES])
 class ChatMessageController @Autowired constructor(
     private val chatMessageMapper: ChatMessageMapper,
     private val chatMessageService: ChatMessageService,

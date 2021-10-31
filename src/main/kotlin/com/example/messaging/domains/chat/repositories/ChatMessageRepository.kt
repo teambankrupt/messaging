@@ -19,7 +19,8 @@ interface ChatMessageRepository : JpaRepository<ChatMessage, Long> {
     @Query("SELECT cm FROM ChatMessage cm WHERE cm.id=:id AND cm.deleted=false")
     fun find(@Param("id") id: Long): Optional<ChatMessage>
 
-    @Query("SELECT cm FROM ChatMessage cm WHERE cm.chatRoom.id=:chatroomId AND cm.deleted=false")
-    fun findForChatroom(@Param("chatroomId") id: Long): List<ChatMessage>
+    @Query("SELECT cm FROM ChatMessage cm WHERE cm.chatRoom.id=:chatroomId" +
+            " AND (:lastMessageId IS NULL OR cm.id>:lastMessageId) AND cm.deleted=false")
+    fun findForChatroom(@Param("chatroomId") id: Long, @Param("lastMessageId") lastMessageId: Long?): List<ChatMessage>
 
 }

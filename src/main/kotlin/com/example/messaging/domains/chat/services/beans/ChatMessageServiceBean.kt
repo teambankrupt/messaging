@@ -12,11 +12,11 @@ import java.util.*
 
 @Service
 class ChatMessageServiceBean @Autowired constructor(
-        private val chatMessageRepository: ChatMessageRepository
+    private val chatMessageRepository: ChatMessageRepository
 ) : ChatMessageService {
 
-    override fun findForChatroom(chatroomId: Long): List<ChatMessage> {
-        return this.chatMessageRepository.findForChatroom(chatroomId)
+    override fun findForChatroom(chatroomId: Long, lastMessageId: Long?): List<ChatMessage> {
+        return this.chatMessageRepository.findForChatroom(chatroomId, lastMessageId)
     }
 
     override fun search(query: String, page: Int, size: Int): Page<ChatMessage> {
@@ -34,7 +34,8 @@ class ChatMessageServiceBean @Autowired constructor(
 
     override fun delete(id: Long, softDelete: Boolean) {
         if (softDelete) {
-            val cm = this.chatMessageRepository.find(id).orElseThrow { ExceptionUtil.notFound("Could not find chat message with id: $id") }
+            val cm = this.chatMessageRepository.find(id)
+                .orElseThrow { ExceptionUtil.notFound("Could not find chat message with id: $id") }
             cm.isDeleted = false
             this.save(cm)
             return

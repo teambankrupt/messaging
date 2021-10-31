@@ -15,9 +15,11 @@ class Route {
             const val SEARCH_MY_CHATROOMS = "$API$VERSION/chat/my-chatrooms"
             const val CREATE_CHATROOM = "$API$VERSION/chat/chatrooms"
             const val FIND_CHATROOM = "$API$VERSION/chat/chatrooms/{id}"
-            const val FIND_CHATROOM_MESSAGES = "$API$VERSION/chat/chatrooms/{id}/messages"
             const val UPDATE_CHATROOM = "$API$VERSION/chat/chatrooms/{id}"
             const val DELETE_CHATROOM = "$API$VERSION/chat/chatrooms/{id}"
+
+            const val FIND_CHATROOM_MESSAGES = "$API$VERSION/chat/chatrooms/{id}/messages"
+            const val CHAT_SEND = "$API$VERSION/chat/chatrooms/{id}/send"
 
             // Chat
             const val CHAT = "/chat"
