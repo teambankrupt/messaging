@@ -1,20 +1,14 @@
 package com.example.messaging.domains.chat.controllers
 
 import com.example.auth.config.security.SecurityContext
-import com.example.common.utils.ExceptionUtil
 import com.example.coreweb.commons.Constants
-import com.example.coreweb.domains.base.controllers.CrudControllerV3
-import com.example.coreweb.domains.base.models.enums.SortByFields
 import com.example.messaging.domains.chat.models.dtos.ChatMessageDto
 import com.example.messaging.domains.chat.models.mappers.ChatMessageMapper
 import com.example.messaging.domains.chat.services.ChatMessageService
 import com.example.messaging.routing.Route
 import io.swagger.annotations.Api
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Sort
 import org.springframework.http.ResponseEntity
-import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 

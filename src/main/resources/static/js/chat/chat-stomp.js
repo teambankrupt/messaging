@@ -15,7 +15,7 @@ function setConnected(connected) {
 function connect() {
     if (stompClient != null) return;
     var baseUrl = document.getElementById('base_url').value;
-    var socket = new SockJS(baseUrl + '/ws');
+    var socket = new SockJS(baseUrl + "/connect");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         // setConnected(true);
@@ -62,7 +62,7 @@ function sendMessage() {
     var text = document.getElementById('content').value;
     var requObject = JSON.stringify({'chat_room_id': from, 'content': text, 'from':'01316343767'});
     // console.log(requObject);
-    stompClient.send("/ws/chat", {}, requObject);
+    stompClient.send("/messages/chat", {}, requObject);
 }
 
 function showMessageOutput(message) {
