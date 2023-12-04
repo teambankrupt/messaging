@@ -1,7 +1,5 @@
 package com.example.messaging.routing
 
-import com.example.messaging.configs.TOPIC
-import com.example.messaging.configs.queue
 
 class Route {
     class V1 {
@@ -34,11 +32,11 @@ class Route {
         const val PING = "/ping"
 
         // TOPICS
-        const val TOPIC_ALL = "$TOPIC/all"
-        const val TOPIC_TIME = "$TOPIC/time"
+        const val TOPIC_ALL = "/all"
+        const val TOPIC_TIME = "/time"
+        const val TOPIC_PING = PING
 
         // QUEUE
-        val QUEUE_USER_CONNECTED = queue("connected")
-        fun userQueue(sessionId: String) = queue("/$sessionId/ping")
+        const val QUEUE_PING = PING
     }
 }

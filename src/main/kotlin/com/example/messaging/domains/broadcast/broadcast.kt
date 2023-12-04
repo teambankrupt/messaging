@@ -1,11 +1,12 @@
 package com.example.messaging.domains.broadcast
 
 import com.example.common.utils.TimeUtility
+import com.example.messaging.configs.QUEUE_PREFIX
+import com.example.messaging.configs.TOPIC_PREFIX
 import com.example.messaging.routing.Route
 import org.springframework.messaging.Message
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -20,36 +21,32 @@ class BroadcastController(
 
     @MessageMapping(Route.WS.PING)
     fun ping(@Payload message: Message<PingMessage>) {
-        val headers = SimpMessageHeaderAccessor.wrap(message)
 
-        headers.sessionId?.let {
-            this.broadcastService.broadcast(
-                Route.WS.userQueue(sessionId = it),
-                message.payload
-            )
-        }
+        this.broadcastService.broadcast(Route.WS.TOPIC_PING, message.payload)
+
+        /*
+        will be implemented correctly when session mapping is implemented.
+         */
+//        val headers = SimpMessageHeaderAccessor.wrap(message)
+//        headers.sessionId?.let { sessionId ->
+//            this.broadcastService.broadcastToUser(
+//                sessionId,
+//                Route.WS.QUEUE_PING,
+//                message.payload
+//            )
+//        }
 
     }
 
     @Scheduled(fixedRate = 5000)
     fun broadcastTime() {
-        this.broadcastService.broadcast(Route.WS.TOPIC_TIME, object : WSMessage() {
-            override val message: String = "Time: ${TimeUtility.readableTimeFromInstant(Instant.now())}"
-        })
+        this.broadcastService.broadcast(
+            Route.WS.TOPIC_TIME, PingMessage(
+                message = "Time: ${TimeUtility.readableTimeFromInstant(Instant.now())}"
+            )
+        )
     }
 
-}
-
-data class PingMessage(override val message: String) : WSMessage()
-data class Item(
-    val message: String,
-    val username: String,
-    val data: Map<String, Any>
-)
-abstract class WSMessage {
-    val username: String? = null
-    abstract val message: String
-    val data: Map<String, Any> = mapOf()
 }
 
 @Component
@@ -58,10 +55,9 @@ class BroadcastService(
 ) {
 
     fun <T : WSMessage> broadcast(topic: String, message: T) =
-        this.simpMessagingTemplate.convertAndSend(topic, message)
+        this.simpMessagingTemplate.convertAndSend("$TOPIC_PREFIX$topic", message)
 
-//    fun <T: WSMessage>broadcastToUser(queue: Route.WS.V1.Queues, message: T) =
-//        this.simpMessagingTemplate.convertAndSendToUser(queue.value, message)
-
+    fun <T : WSMessage> broadcastToUser(sessionId: String, queue: String, message: T) =
+        this.simpMessagingTemplate.convertAndSendToUser(sessionId, "$QUEUE_PREFIX$queue", message)
 
 }

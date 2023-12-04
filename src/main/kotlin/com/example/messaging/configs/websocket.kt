@@ -6,8 +6,8 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
 
-const val TOPIC = "/topic"
-fun queue(id: String? = null) = id?.let { "/queue/$it" } ?: "/queue/default"
+const val TOPIC_PREFIX = "/topic"
+const val QUEUE_PREFIX = "/queue"
 const val MESSAGES = "/messages"
 
 @Configuration
@@ -15,7 +15,7 @@ const val MESSAGES = "/messages"
 open class WebSocketConfig : WebSocketMessageBrokerConfigurer {
 
     override fun configureMessageBroker(registry: MessageBrokerRegistry) {
-        registry.enableSimpleBroker(TOPIC)
+        registry.enableSimpleBroker(TOPIC_PREFIX)
         registry.setApplicationDestinationPrefixes(MESSAGES)
     }
 
