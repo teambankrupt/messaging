@@ -1,0 +1,32 @@
+package com.example.messaging.configs
+
+import org.springframework.context.annotation.Configuration
+import org.springframework.messaging.simp.config.MessageBrokerRegistry
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
+
+const val TOPIC = "/topic"
+fun queue(id: String? = null) = id?.let { "/queue/$it" } ?: "/queue/default"
+const val MESSAGES = "/messages"
+
+@Configuration
+@EnableWebSocketMessageBroker
+open class WebSocketConfig : WebSocketMessageBrokerConfigurer {
+
+    override fun configureMessageBroker(registry: MessageBrokerRegistry) {
+        registry.enableSimpleBroker(TOPIC)
+        registry.setApplicationDestinationPrefixes(MESSAGES)
+    }
+
+    override fun registerStompEndpoints(registry: StompEndpointRegistry) {
+        val allowedOrigins = arrayOf(
+            "servicito.com", "dev.servicito.com", "servicito.com/*",
+            "astha.app", "dev.astha.app", "astha.app/*"
+        )
+        registry.addEndpoint("/connect").setAllowedOrigins(*allowedOrigins)
+        registry.addEndpoint("/connect").setAllowedOrigins(*allowedOrigins).withSockJS()
+    }
+
+}
+
