@@ -4,6 +4,7 @@ import com.example.common.utils.TimeUtility
 import com.example.messaging.configs.QUEUE_PREFIX
 import com.example.messaging.configs.TOPIC_PREFIX
 import com.example.messaging.routing.Route
+import org.slf4j.LoggerFactory
 import org.springframework.messaging.Message
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
@@ -38,7 +39,7 @@ class BroadcastController(
 
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 60000)
     fun broadcastTime() {
         this.broadcastService.broadcast(
             Route.WS.TOPIC_TIME, PingMessage(
@@ -53,11 +54,22 @@ class BroadcastController(
 class BroadcastService(
     private val simpMessagingTemplate: SimpMessagingTemplate
 ) {
+    private val logger = LoggerFactory.getLogger(BroadcastService::class.java)
 
-    fun <T : WSMessage> broadcast(topic: String, message: T) =
+    fun <T : WSMessage> broadcast(topic: String, message: T) = try {
         this.simpMessagingTemplate.convertAndSend("$TOPIC_PREFIX$topic", message)
+    } catch (e: Exception) {
+        logger.error("Error occurred when sending broadcast to topic: $topic")
+        logger.error(e.toString())
+    }
 
-    fun <T : WSMessage> broadcastToUser(sessionId: String, queue: String, message: T) =
+
+    fun <T : WSMessage> broadcastToUser(sessionId: String, queue: String, message: T) = try {
         this.simpMessagingTemplate.convertAndSendToUser(sessionId, "$QUEUE_PREFIX$queue", message)
+    } catch (e: Exception) {
+        logger.error("Error occurred when sending broadcast to user/session id: $sessionId")
+        logger.error(e.toString())
+    }
+
 
 }
