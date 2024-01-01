@@ -3,7 +3,7 @@ package com.example.messaging
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = ["com.example"])
 open class MessagingApplication {
     companion object {
         @JvmStatic
