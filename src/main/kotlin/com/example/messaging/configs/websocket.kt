@@ -22,7 +22,8 @@ open class WebSocketConfig : WebSocketMessageBrokerConfigurer {
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         val allowedOrigins = arrayOf(
             "servicito.com", "dev.servicito.com", "servicito.com/*",
-            "astha.app", "dev.astha.app", "astha.app/*"
+            "astha.app", "dev.astha.app", "astha.app/*",
+            "cognitox.org", "dev.cognitox.org", "cognitox.org/*"
         )
         registry.addEndpoint("/connect").setAllowedOrigins(*allowedOrigins)
         registry.addEndpoint("/connect").setAllowedOrigins(*allowedOrigins).withSockJS()
